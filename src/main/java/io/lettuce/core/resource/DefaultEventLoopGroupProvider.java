@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import io.lettuce.core.EpollProvider;
-
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.*;
@@ -164,6 +163,7 @@ public class DefaultEventLoopGroupProvider implements EventLoopGroupProvider {
         }
 
         Future<?> shutdownFuture = eventLoopGroup.shutdownGracefully(quietPeriod, timeout, unit);
+
         return toBooleanPromise(shutdownFuture);
     }
 

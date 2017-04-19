@@ -20,6 +20,7 @@ import static io.lettuce.core.resource.Futures.toBooleanPromise;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import reactor.core.scheduler.Schedulers;
 import io.lettuce.core.event.DefaultEventBus;
 import io.lettuce.core.event.DefaultEventPublisherOptions;
 import io.lettuce.core.event.EventBus;
@@ -33,7 +34,6 @@ import io.lettuce.core.metrics.CommandLatencyCollectorOptions;
 import io.lettuce.core.metrics.DefaultCommandLatencyCollector;
 import io.lettuce.core.metrics.DefaultCommandLatencyCollectorOptions;
 import io.lettuce.core.resource.Delay.StatefulDelay;
-
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
 import io.netty.util.Version;
@@ -41,7 +41,6 @@ import io.netty.util.concurrent.*;
 import io.netty.util.internal.SystemPropertyUtil;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * Default instance of the client resources.
@@ -499,6 +498,9 @@ public class DefaultClientResources implements ClientResources {
      */
     @SuppressWarnings("unchecked")
     public Future<Boolean> shutdown(long quietPeriod, long timeout, TimeUnit timeUnit) {
+
+        System.out.println("shutdown: " + eventExecutorGroup);
+        new Exception().printStackTrace();
 
         shutdownCalled = true;
         DefaultPromise<Boolean> overall = new DefaultPromise<Boolean>(GlobalEventExecutor.INSTANCE);

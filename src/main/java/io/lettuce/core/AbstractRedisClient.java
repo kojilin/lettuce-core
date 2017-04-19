@@ -237,6 +237,7 @@ public abstract class AbstractRedisClient {
         SocketAddress redisAddress = connectionBuilder.socketAddress();
 
         if (clientResources.eventExecutorGroup().isShuttingDown()) {
+            System.out.println("Shut down: " + clientResources.eventExecutorGroup());
             throw new IllegalStateException("Cannot connect, Event executor group is terminated.");
         }
 
