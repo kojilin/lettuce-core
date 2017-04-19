@@ -133,7 +133,14 @@ public class DefaultEventLoopGroupProvider implements EventLoopGroupProvider {
     public static <T extends EventExecutorGroup> EventExecutorGroup createEventLoopGroup(Class<T> type, int numberOfThreads) {
 
         if (DefaultEventExecutorGroup.class.equals(type)) {
-            return new DefaultEventExecutorGroup(numberOfThreads, new DefaultThreadFactory("lettuce-eventExecutorLoop", true));
+            return new DefaultEventExecutorGroup(numberOfThreads, new DefaultThreadFactory("lettuce-eventExecutorLoop", true)) {
+                @Override
+                public Future<?> shutdownGracefully(long quietPeriod, long timeout, TimeUnit unit) {
+                    System.out.println("Trigger shutdownGracefully:" + this);
+                    new Exception().printStackTrace();
+                    return super.shutdownGracefully(quietPeriod, timeout, unit);
+                }
+            };
         }
 
         if (NioEventLoopGroup.class.equals(type)) {
