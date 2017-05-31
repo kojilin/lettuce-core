@@ -27,7 +27,11 @@ import com.lambdaworks.redis.resource.Delay;
 import com.lambdaworks.redis.resource.Delay.StatefulDelay;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
@@ -227,6 +231,9 @@ public class ConnectionWatchdog extends ChannelInboundHandlerAdapter implements 
                     });
                 }
             }, timeout, TimeUnit.MILLISECONDS);
+            if (reconnectScheduleTimeout.isExpired()) {
+                logger.warn("reconnectScheduleTimeout is expired, but it's keeping not null");
+            }
         } else {
             logger.debug("{} Skipping scheduleReconnect() because I have an active channel", logPrefix());
         }
