@@ -27,7 +27,11 @@ import com.lambdaworks.redis.resource.Delay;
 import com.lambdaworks.redis.resource.Delay.StatefulDelay;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
@@ -242,6 +246,10 @@ public class ConnectionWatchdog extends ChannelInboundHandlerAdapter implements 
      */
     @Override
     public void run(Timeout timeout) throws Exception {
+
+        if (reconnectScheduleTimeout == null) {
+            logger.log(InternalLogLevel.WARN, "reconnectScheduleTimeout is null");
+        }
 
         reconnectScheduleTimeout = null;
 
